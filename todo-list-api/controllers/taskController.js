@@ -6,24 +6,53 @@ const Task = require('../models/task.model');
 
 const getAllTasks = (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; 
-        const limit = parseInt(req.query.limit) || 5; 
+        // Pagination parameters
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
 
+        // Sorting parameters
+        const sortBy = req.query.sortBy || 'id'; // Default to sort by id
+        const sortOrder = req.query.sortOrder && req.query.sortOrder.toLowerCase() === 'desc' ? -1 : 1;
+
+        // Filtering parameters
+        const filterTitle = req.query.filterTitle || '';
+        const filterDescription = req.query.filterDescription || '';
+
+        // Filter and sort tasks
+        let filteredTasks = tasks.filter(task => 
+            task.title.toLowerCase().includes(filterTitle.toLowerCase()) &&
+            task.description.toLowerCase().includes(filterDescription.toLowerCase())
+        );
+
+        filteredTasks.sort((task1, task2) => {
+            if (task1[sortBy] < task2[sortBy]) {
+                return -1 * sortOrder;
+            }
+            if (task1[sortBy] > task2[sortBy]) {
+                return 1 * sortOrder;
+            }
+            return 0;
+        });
+
+        // Calculate pagination indices
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
-        const tasksPage = tasks.slice(startIndex, endIndex);
+        // Paginate tasks
+        const tasksPage = filteredTasks.slice(startIndex, endIndex);
 
+        // Response
         res.status(200).json({
             page: page,
             limit: limit,
-            total: tasks.length,
+            total: filteredTasks.length,
             tasks: tasksPage
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 
 const getTaskById = (req, res) => {

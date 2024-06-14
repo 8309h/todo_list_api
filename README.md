@@ -24,15 +24,15 @@ Retrieves a paginated list of tasks.
 
 Query Parameters:
 
- * - page (optional): Page number (default: 1).
- * - limit (optional): Number of tasks per page (default: 5).
- * - sortBy (optional): Field to sort by (title or id, default: id).
- * - sortOrder (optional): Sort order (asc or desc, default: asc).
- * - filterTitle (optional): Filter tasks by title containing this string.
- * - filterDescription (optional): Filter tasks by description containing this string.
- * 
- * Example:
- 
+- page (optional): Page number (default: 1).
+- limit (optional): Number of tasks per page (default: 5).
+- sortBy (optional): Field to sort by (title or id, default: id).
+- sortOrder (optional): Sort order (asc or desc, default: asc).
+- filterTitle (optional): Filter tasks by title containing this string.
+- filterDescription (optional): Filter tasks by description containing this string.
+
+Example:
+
  * GET /tasks/getall?page=1&limit=5&sortBy=title&sortOrder=desc&filterTitle=task
  */
 
